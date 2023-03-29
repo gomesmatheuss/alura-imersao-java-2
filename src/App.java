@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -22,10 +24,18 @@ public class App {
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
 
         // exibir os dados
+        StickMaker stickMaker = new StickMaker();
         for (Map<String,String> filme : listaDeFilmes) {
-            System.out.println(filme.get("title"));
-            System.out.println(filme.get("image"));
-            System.out.println(filme.get("imDbRating"));
+
+            String urlImage = filme.get("image");
+            String title = filme.get("title");
+            
+            InputStream inputStream = new URL(urlImage).openStream();
+            String fileName = "src/img/" + title + ".png";
+
+            stickMaker.create(inputStream, fileName);
+
+            System.out.println(title);
             System.out.println();
         }
 
